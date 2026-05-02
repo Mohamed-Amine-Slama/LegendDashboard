@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-light: #F0EDE8;
+  --color-bg-dark:  #1A1A1A;
+  --color-bg-night: #0E0E0E;
+  --color-accent:   #C8A96E;
+  --color-accent-deep: #A88848;
+  --color-danger:   #C8273A;
+  --color-success:  #4AC9A0;
+  --color-border:   rgba(26, 26, 26, 0.1);
+  --color-muted:    rgba(26, 26, 26, 0.55);
+}
+
+:root { color-scheme: light; }
+
+html, body {
+  background: #F0EDE8;
+  color: #1A1A1A;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+
+::selection { background: #C8A96E; color: #1A1A1A; }
+
+input, select, textarea {
+  font: inherit;
+}

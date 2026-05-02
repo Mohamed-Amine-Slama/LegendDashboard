@@ -1,0 +1,59 @@
+/**
+ * Shared product / category / flavor shapes. MUST stay aligned with the
+ * storefront's `vape-store-vitrine/types/mongo.ts` — keep both in sync
+ * whenever a field is added/removed.
+ */
+
+export type ShopCategory = "PODS" | "PUFFS" | "CAPSULES" | "LIQUID";
+
+export type FlavorFamily =
+  | "Fruity"
+  | "Minty"
+  | "Creamy"
+  | "Tobacco"
+  | "Sweet"
+  | "Icy";
+
+export type Brand =
+  | "LEGEND VAPE STORE Original"
+  | "LEGEND VAPE STORE MAX"
+  | "LEGEND VAPE STORE PRO"
+  | "LEGEND VAPE STORE LITE";
+
+export type NicotineMg = 0 | 10 | 20 | 50;
+
+export type Volume = 1 | 2 | 4 | 10 | 30;
+
+export type ProductBadge = "NEW" | "HOT" | "MAX";
+
+/** Mongo document shape for the `products` collection. */
+export interface MongoProduct {
+  _id?: string; // stringified ObjectId at the API boundary
+  name: string;
+  category: ShopCategory;
+  description: string;
+  priceTND: number;
+  nicotineMg: NicotineMg;
+  mlSize?: Volume;
+  puffCount?: number;
+  caffeinated: boolean;
+  brand: Brand;
+  flavorFamily: FlavorFamily;
+  flavorColor: string; // hex
+  imageUrl?: string;
+  propImageUrl?: string;
+  badge?: ProductBadge;
+  releaseOrder: number;
+  featuredOrder: number;
+  inStock: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+/** Form-level shape — same as MongoProduct but every field is optional
+ *  except validation fields. Used by the create/edit form. */
+export type ProductDraft = Partial<MongoProduct> & {
+  name: string;
+  category: ShopCategory;
+  priceTND: number;
+};
