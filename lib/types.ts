@@ -4,7 +4,7 @@
  * whenever a field is added/removed.
  */
 
-export type ShopCategory = "PODS" | "PUFFS" | "CAPSULES" | "LIQUID";
+export type ShopCategory = "PODS" | "PUFFS" | "CAPSULES" | "LIQUID" | "COILS";
 
 export type FlavorFamily =
   | "Fruity"
@@ -18,7 +18,9 @@ export type Brand =
   | "LEGEND VAPE STORE Original"
   | "LEGEND VAPE STORE MAX"
   | "LEGEND VAPE STORE PRO"
-  | "LEGEND VAPE STORE LITE";
+  | "LEGEND VAPE STORE LITE"
+  | "Vozol"
+  | "Wotofo";
 
 export type NicotineMg = 0 | 10 | 20 | 50;
 
@@ -42,6 +44,8 @@ export interface MongoProduct {
   flavorColor: string; // hex
   imageUrl?: string;
   propImageUrl?: string;
+  /** Flavor variants — shown in the storefront's product detail modal (PUFFS/PODS/CAPSULES). */
+  flavors?: string[];
   badge?: ProductBadge;
   releaseOrder: number;
   featuredOrder: number;

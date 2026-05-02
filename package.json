@@ -6,7 +6,9 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start -p 3001",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "node --env-file=.env.local scripts/seed-products.mjs",
+    "seed:reset": "node --env-file=.env.local scripts/seed-products.mjs --reset"
   },
   "dependencies": {
     "mongodb": "^7.2.0",

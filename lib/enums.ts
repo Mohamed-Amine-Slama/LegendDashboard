@@ -9,7 +9,7 @@ import type {
 
 /** Single source of truth for select-list options across the dashboard. */
 
-export const CATEGORIES: ShopCategory[] = ["PODS", "PUFFS", "CAPSULES", "LIQUID"];
+export const CATEGORIES: ShopCategory[] = ["PODS", "PUFFS", "CAPSULES", "LIQUID", "COILS"];
 
 export const NICOTINE_OPTIONS: { value: NicotineMg; label: string }[] = [
   { value: 0, label: "0mg — Nicotine Free" },
@@ -34,6 +34,8 @@ export const BRANDS: Brand[] = [
   "LEGEND VAPE STORE MAX",
   "LEGEND VAPE STORE PRO",
   "LEGEND VAPE STORE LITE",
+  "Vozol",
+  "Wotofo",
 ];
 
 export const BADGES: { value: ProductBadge | ""; label: string }[] = [
