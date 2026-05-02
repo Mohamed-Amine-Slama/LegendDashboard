@@ -11,7 +11,7 @@ export default function NewProductPage() {
       >
         ← Back to products
       </Link>
-      <h1 className="mb-6 text-3xl font-bold tracking-tight">New product</h1>
+      <h1 className="mb-6 text-2xl font-bold tracking-tight sm:text-3xl">New product</h1>
 
       <ProductForm />
     </AdminShell>

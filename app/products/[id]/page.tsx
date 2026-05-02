@@ -35,9 +35,11 @@ export default async function EditProductPage({ params }: PageProps) {
       >
         ← Back to products
       </Link>
-      <div className="mb-6 flex items-end justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">{product.name}</h1>
-        <span className="text-xs uppercase tracking-wider text-muted">
+      <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <h1 className="break-words text-2xl font-bold tracking-tight sm:text-3xl">
+          {product.name}
+        </h1>
+        <span className="break-all text-[11px] uppercase tracking-wider text-muted sm:text-xs">
           ID: {product._id}
         </span>
       </div>

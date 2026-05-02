@@ -19,16 +19,19 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-bg-light/95 px-6 py-3 backdrop-blur">
+      <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-border bg-bg-light/95 px-4 py-3 backdrop-blur sm:px-6">
         <Link
           href="/products"
-          className="flex items-center gap-2 text-sm font-bold tracking-tight"
+          className="flex min-w-0 items-center gap-2 text-sm font-bold tracking-tight"
         >
-          <span className="inline-block h-2 w-2 rounded-full bg-accent" />
-          LEGEND VAPE STORE · Admin
+          <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-accent" />
+          <span className="truncate">
+            <span className="sm:hidden">Legend · Admin</span>
+            <span className="hidden sm:inline">LEGEND VAPE STORE · Admin</span>
+          </span>
         </Link>
 
-        <nav className="flex items-center gap-1 text-[12px] font-medium uppercase tracking-wider">
+        <nav className="flex shrink-0 items-center gap-1 text-[12px] font-medium uppercase tracking-wider">
           <Link
             href="/products"
             className={navLink(pathname?.startsWith("/products") ?? false)}
@@ -38,14 +41,17 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           <button
             onClick={logout}
             type="button"
-            className="ml-3 rounded-full border border-border px-3 py-1.5 text-[11px] uppercase tracking-wider transition-colors hover:border-bg-dark hover:bg-bg-dark hover:text-bg-light"
+            className="ml-2 rounded-full border border-border px-3 py-1.5 text-[11px] uppercase tracking-wider transition-colors hover:border-bg-dark hover:bg-bg-dark hover:text-bg-light sm:ml-3"
           >
-            Sign out
+            <span className="sm:hidden">Logout</span>
+            <span className="hidden sm:inline">Sign out</span>
           </button>
         </nav>
       </header>
 
-      <main className="mx-auto max-w-7xl px-6 py-8">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
+        {children}
+      </main>
     </div>
   );
 }

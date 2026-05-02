@@ -33,6 +33,8 @@ const EMPTY: MongoProduct = {
   releaseOrder: Math.floor(Date.now() / 1000),
   featuredOrder: 100,
   inStock: true,
+  onPromo: false,
+  promoPriceTND: undefined,
 };
 
 export default function ProductForm({ product }: Props) {
@@ -46,16 +48,47 @@ export default function ProductForm({ product }: Props) {
     setDraft((d) => ({ ...d, [key]: value }));
   }
 
+  /** Switching category changes which of mlSize / puffCount is meaningful.
+   *  Drop the stale one so it doesn't get persisted on the document. */
+  function onCategoryChange(next: MongoProduct["category"]) {
+    setDraft((d) => ({
+      ...d,
+      category: next,
+      ...(next === "PUFFS"
+        ? { mlSize: undefined }
+        : { puffCount: undefined }),
+    }));
+  }
+
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
+
+    // Client-side guard for the promo combo. The API also validates this.
+    if (draft.onPromo) {
+      const promo = Number(draft.promoPriceTND);
+      if (!Number.isFinite(promo) || promo < 0) {
+        setError("Promo price is required when promotion is enabled.");
+        return;
+      }
+      if (promo >= draft.priceTND) {
+        setError("Promo price must be lower than the regular price.");
+        return;
+      }
+    }
+
+    // Strip stale promoPrice when promo is disabled so the DB stays clean.
+    const payload: MongoProduct = draft.onPromo
+      ? draft
+      : { ...draft, onPromo: false, promoPriceTND: undefined };
+
     start(async () => {
       const url = isEdit ? `/api/products/${product?._id}` : "/api/products";
       const method = isEdit ? "PUT" : "POST";
       const res = await fetch(url, {
         method,
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(draft),
+        body: JSON.stringify(payload),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
@@ -67,10 +100,19 @@ export default function ProductForm({ product }: Props) {
     });
   }
 
+  const promoPercent =
+    draft.onPromo &&
+    typeof draft.promoPriceTND === "number" &&
+    draft.promoPriceTND >= 0 &&
+    draft.promoPriceTND < draft.priceTND &&
+    draft.priceTND > 0
+      ? Math.round((1 - draft.promoPriceTND / draft.priceTND) * 100)
+      : null;
+
   return (
     <form onSubmit={onSubmit} className="grid grid-cols-1 gap-8 lg:grid-cols-[2fr_1fr]">
       {/* ── Main column ────────────────────────────────────────────── */}
-      <div className="space-y-6 rounded-2xl border border-border bg-white p-6">
+      <div className="space-y-6 rounded-2xl border border-border bg-white p-4 sm:p-6">
         <Section title="Basic info">
           <Field label="Name *">
             <input
@@ -91,11 +133,11 @@ export default function ProductForm({ product }: Props) {
               placeholder="Italic descriptor shown under the product name."
             />
           </Field>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field label="Category *">
               <select
                 value={draft.category}
-                onChange={(e) => set("category", e.target.value as MongoProduct["category"])}
+                onChange={(e) => onCategoryChange(e.target.value as MongoProduct["category"])}
                 className={inputCls}
               >
                 {CATEGORIES.map((c) => (
@@ -122,7 +164,7 @@ export default function ProductForm({ product }: Props) {
         </Section>
 
         <Section title="Specs">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field label="Nicotine strength">
               <select
                 value={draft.nicotineMg}
@@ -175,7 +217,7 @@ export default function ProductForm({ product }: Props) {
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field label="Flavor family">
               <select
                 value={draft.flavorFamily}
@@ -226,7 +268,8 @@ export default function ProductForm({ product }: Props) {
         <Section title="Media">
           <Field label="Main image URL">
             <input
-              type="url"
+              type="text"
+              inputMode="url"
               value={draft.imageUrl ?? ""}
               onChange={(e) => set("imageUrl", e.target.value)}
               className={inputCls}
@@ -235,7 +278,8 @@ export default function ProductForm({ product }: Props) {
           </Field>
           <Field label="Prop image URL (optional)">
             <input
-              type="url"
+              type="text"
+              inputMode="url"
               value={draft.propImageUrl ?? ""}
               onChange={(e) => set("propImageUrl", e.target.value)}
               className={inputCls}
@@ -251,11 +295,38 @@ export default function ProductForm({ product }: Props) {
             />
           )}
         </Section>
+
+        {(draft.category === "PUFFS" ||
+          draft.category === "PODS" ||
+          draft.category === "CAPSULES") && (
+          <Section title="Available flavors">
+            <Field label="Flavors (one per line)">
+              <textarea
+                rows={5}
+                value={(draft.flavors ?? []).join("\n")}
+                onChange={(e) =>
+                  set(
+                    "flavors",
+                    e.target.value
+                      .split("\n")
+                      .map((s) => s.trim())
+                      .filter(Boolean),
+                  )
+                }
+                className={inputCls}
+                placeholder={"Strawberry Mint\nMango Ice\nBlue Razz"}
+              />
+              <p className="mt-1 text-[11px] text-muted">
+                Listed under the product on the storefront detail modal. Leave empty to hide.
+              </p>
+            </Field>
+          </Section>
+        )}
       </div>
 
       {/* ── Side column ────────────────────────────────────────────── */}
       <div className="space-y-6">
-        <div className="space-y-4 rounded-2xl border border-border bg-white p-6">
+        <div className="space-y-4 rounded-2xl border border-border bg-white p-4 sm:p-6">
           <h3 className="text-sm font-bold uppercase tracking-wider">Shop settings</h3>
 
           <Field label="Price (TND) *">
@@ -319,8 +390,73 @@ export default function ProductForm({ product }: Props) {
                 className="h-4 w-4 rounded border-border"
               />
               In stock
+              {!draft.inStock && (
+                <span className="ml-auto rounded-full bg-danger/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-danger">
+                  Sold out
+                </span>
+              )}
             </label>
           </Field>
+        </div>
+
+        <div className="space-y-4 rounded-2xl border border-border bg-white p-4 sm:p-6">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold uppercase tracking-wider">Promotion</h3>
+            {promoPercent !== null && (
+              <span className="rounded-full bg-danger px-2.5 py-0.5 text-[11px] font-bold tracking-wider text-white">
+                −{promoPercent}%
+              </span>
+            )}
+          </div>
+
+          <Field>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={draft.onPromo ?? false}
+                onChange={(e) => {
+                  const on = e.target.checked;
+                  setDraft((d) => ({
+                    ...d,
+                    onPromo: on,
+                    // Seed promo price at 80% of regular when toggling on for the first time.
+                    promoPriceTND:
+                      on && (d.promoPriceTND === undefined || d.promoPriceTND === null)
+                        ? Math.max(0, Math.round(d.priceTND * 0.8 * 100) / 100)
+                        : d.promoPriceTND,
+                  }));
+                }}
+                className="h-4 w-4 rounded border-border"
+              />
+              On promo
+            </label>
+            <p className="mt-1 text-[11px] text-muted">
+              When enabled, storefront shows a strikethrough on the regular price and a PROMO badge.
+            </p>
+          </Field>
+
+          {draft.onPromo && (
+            <Field label="Promo price (TND) *">
+              <input
+                type="number"
+                min={0}
+                max={draft.priceTND > 0 ? draft.priceTND - 0.01 : undefined}
+                step={0.5}
+                value={draft.promoPriceTND ?? ""}
+                onChange={(e) =>
+                  set(
+                    "promoPriceTND",
+                    e.target.value === "" ? undefined : Number(e.target.value),
+                  )
+                }
+                className={inputCls}
+                placeholder="e.g. 24.5"
+              />
+              <p className="mt-1 text-[11px] text-muted">
+                Must be lower than the regular price ({draft.priceTND.toFixed(2)} TND).
+              </p>
+            </Field>
+          )}
         </div>
 
         {error && (

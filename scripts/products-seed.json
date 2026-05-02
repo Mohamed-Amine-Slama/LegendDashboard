@@ -1054,7 +1054,7 @@
     "brand": "LEGEND VAPE STORE PRO",
     "flavorFamily": "Fruity",
     "flavorColor": "#1A1A1A",
-    "imageUrl": "/products/device-refill.png",
+    "imageUrl": "https://www.wotofo.com/cdn/shop/products/Wotofo-nexPOD-Starter-Kit-Caramel-Tobacco_1024x1024.png",
     "flavors": [
       "Watermelon Ice",
       "Mango Peach",
@@ -1080,7 +1080,7 @@
     "brand": "LEGEND VAPE STORE Original",
     "flavorFamily": "Fruity",
     "flavorColor": "#C8A96E",
-    "imageUrl": "/products/device-refill.png",
+    "imageUrl": "https://www.wotofo.com/cdn/shop/products/nexPod-cartridge-caramel-tobacco.png",
     "flavors": [
       "Strawberry Kiwi",
       "Watermelon Ice",
@@ -1105,7 +1105,7 @@
     "brand": "LEGEND VAPE STORE PRO",
     "flavorFamily": "Fruity",
     "flavorColor": "#C8A96E",
-    "imageUrl": "/products/device-refill.png",
+    "imageUrl": "https://www.wotofo.com/cdn/shop/files/nexPOD_15K_20mg_Prefilled_Pod_Watermelon_Ice.jpg",
     "flavors": [
       "Watermelon Ice",
       "Strawberry Banana",
@@ -1460,6 +1460,38 @@
     "imageUrl": "https://www.wotofo.com/cdn/shop/files/wotofo-ultra-20k-lemon-mint-1.jpg?v=1734090631",
     "featuredOrder": 90,
     "releaseOrder": 1777752783,
+    "inStock": true
+  },
+  {
+    "name": "NexPod Kit 15K",
+    "category": "PODS",
+    "description": "NexPod Prefilled Kit 15000 Puffs.",
+    "priceTND": 35,
+    "nicotineMg": 20,
+    "puffCount": 15000,
+    "caffeinated": false,
+    "brand": "Wotofo",
+    "flavorFamily": "Minty",
+    "flavorColor": "#4AC9A0",
+    "imageUrl": "https://www.wotofo.com/cdn/shop/files/nexPOD_15K_Prefilled_POD_Vape_Kit_Mixed_Berries_500x_crop_center@2x.jpg",
+    "featuredOrder": 301,
+    "releaseOrder": 1777753837,
+    "inStock": true
+  },
+  {
+    "name": "NexPod Refillo",
+    "category": "PODS",
+    "description": "NexPod Refillable Pod.",
+    "priceTND": 15,
+    "nicotineMg": 0,
+    "puffCount": 5000,
+    "caffeinated": false,
+    "brand": "Wotofo",
+    "flavorFamily": "Icy",
+    "flavorColor": "#A8D4E6",
+    "imageUrl": "https://www.wotofo.com/cdn/shop/files/nexpod-refillable-pod-3_500x_crop_center@2x.png",
+    "featuredOrder": 302,
+    "releaseOrder": 1777753838,
     "inStock": true
   }
 ]

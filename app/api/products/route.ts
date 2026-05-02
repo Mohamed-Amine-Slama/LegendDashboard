@@ -77,6 +77,18 @@ export function validateProduct(
   if (typeof body.priceTND !== "number" || body.priceTND < 0) {
     return { ok: false, error: "priceTND must be a non-negative number" };
   }
+  if (body.onPromo) {
+    if (
+      typeof body.promoPriceTND !== "number" ||
+      !Number.isFinite(body.promoPriceTND) ||
+      body.promoPriceTND < 0
+    ) {
+      return { ok: false, error: "promoPriceTND must be a non-negative number when onPromo is true" };
+    }
+    if (body.promoPriceTND >= body.priceTND) {
+      return { ok: false, error: "promoPriceTND must be lower than priceTND" };
+    }
+  }
   return { ok: true };
 }
 

@@ -83,6 +83,88 @@ export async function PUT(req: Request, ctx: RouteContext) {
   return NextResponse.json({ product: { ...result, _id: String(result._id) } });
 }
 
+/**
+ * PATCH /api/products/[id]
+ *
+ * Partial update for the dashboard's quick-action buttons (mark sold out /
+ * mark on promo). Only a small allowlist of fields is accepted — the full
+ * product validation in PUT requires `name`/`category`/`priceTND`, which
+ * the row-level toggles don't have.
+ */
+export async function PATCH(req: Request, ctx: RouteContext) {
+  const unauth = await requireAuth();
+  if (unauth) return unauth;
+
+  const { id } = await ctx.params;
+  const oid = parseId(id);
+  if (!oid) return NextResponse.json({ error: "invalid id" }, { status: 400 });
+
+  let body: Partial<MongoProduct>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "invalid body" }, { status: 400 });
+  }
+
+  const update: Partial<MongoProduct> = {};
+  const unset: Record<string, "" > = {};
+
+  if (typeof body.inStock === "boolean") {
+    update.inStock = body.inStock;
+  }
+
+  if (body.onPromo === false) {
+    update.onPromo = false;
+    unset.promoPriceTND = "";
+  } else if (body.onPromo === true) {
+    if (
+      typeof body.promoPriceTND !== "number" ||
+      !Number.isFinite(body.promoPriceTND) ||
+      body.promoPriceTND < 0
+    ) {
+      return NextResponse.json(
+        { error: "promoPriceTND must be a non-negative number when onPromo is true" },
+        { status: 400 },
+      );
+    }
+    // The price is validated against the existing document below, so we
+    // need to look it up first.
+    const db = await getDb();
+    const existing = await db
+      .collection<MongoProduct>(COLLECTIONS.products)
+      .findOne({ _id: oid as unknown as MongoProduct["_id"] });
+    if (!existing) return NextResponse.json({ error: "not found" }, { status: 404 });
+    if (body.promoPriceTND >= existing.priceTND) {
+      return NextResponse.json(
+        { error: "promoPriceTND must be lower than priceTND" },
+        { status: 400 },
+      );
+    }
+    update.onPromo = true;
+    update.promoPriceTND = body.promoPriceTND;
+  }
+
+  if (Object.keys(update).length === 0 && Object.keys(unset).length === 0) {
+    return NextResponse.json({ error: "no updatable fields in body" }, { status: 400 });
+  }
+
+  update.updatedAt = new Date().toISOString();
+
+  const db = await getDb();
+  const result = await db
+    .collection<MongoProduct>(COLLECTIONS.products)
+    .findOneAndUpdate(
+      { _id: oid as unknown as MongoProduct["_id"] },
+      Object.keys(unset).length ? { $set: update, $unset: unset } : { $set: update },
+      { returnDocument: "after" },
+    );
+
+  if (!result) {
+    return NextResponse.json({ error: "not found" }, { status: 404 });
+  }
+  return NextResponse.json({ product: { ...result, _id: String(result._id) } });
+}
+
 export async function DELETE(_req: Request, ctx: RouteContext) {
   const unauth = await requireAuth();
   if (unauth) return unauth;

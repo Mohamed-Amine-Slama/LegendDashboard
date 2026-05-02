@@ -50,6 +50,11 @@ export interface MongoProduct {
   releaseOrder: number;
   featuredOrder: number;
   inStock: boolean;
+  /** Admin-toggled promotion. When true and `promoPriceTND` is set,
+   *  storefront renders the discounted price + a PROMO badge. */
+  onPromo?: boolean;
+  /** Discounted price in TND. Must be < priceTND when onPromo is true. */
+  promoPriceTND?: number;
   createdAt?: string;
   updatedAt?: string;
 }
