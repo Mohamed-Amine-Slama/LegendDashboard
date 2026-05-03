@@ -11,6 +11,7 @@ import {
   VOLUME_OPTIONS,
 } from "@/lib/enums";
 import type { MongoProduct } from "@/lib/types";
+import CustomSelect from "./CustomSelect";
 
 interface Props {
   /** Existing product when editing; undefined when creating new. */
@@ -135,30 +136,10 @@ export default function ProductForm({ product }: Props) {
           </Field>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field label="Category *">
-              <select
-                value={draft.category}
-                onChange={(e) => onCategoryChange(e.target.value as MongoProduct["category"])}
-                className={inputCls}
-              >
-                {CATEGORIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
+              <CustomSelect value={draft.category} onChange={(val) => set("category", val)} options={CATEGORIES.map(c => ({value:c,label:c}))} />
             </Field>
             <Field label="Brand">
-              <select
-                value={draft.brand}
-                onChange={(e) => set("brand", e.target.value as MongoProduct["brand"])}
-                className={inputCls}
-              >
-                {BRANDS.map((b) => (
-                  <option key={b} value={b}>
-                    {b}
-                  </option>
-                ))}
-              </select>
+              <CustomSelect value={draft.brand} onChange={(val) => set("brand", val)} options={BRANDS.map(b => ({value:b,label:b}))} />
             </Field>
           </div>
         </Section>
@@ -166,19 +147,7 @@ export default function ProductForm({ product }: Props) {
         <Section title="Specs">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field label="Nicotine strength">
-              <select
-                value={draft.nicotineMg}
-                onChange={(e) =>
-                  set("nicotineMg", Number(e.target.value) as MongoProduct["nicotineMg"])
-                }
-                className={inputCls}
-              >
-                {NICOTINE_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
+              <CustomSelect value={draft.nicotineMg} onChange={(val) => set("nicotineMg", Number(val) as MongoProduct["nicotineMg"])} options={NICOTINE_OPTIONS.map(n => ({value:n.value,label:n.label}))} />
             </Field>
 
             {draft.category === "PUFFS" ? (
@@ -219,19 +188,7 @@ export default function ProductForm({ product }: Props) {
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field label="Flavor family">
-              <select
-                value={draft.flavorFamily}
-                onChange={(e) =>
-                  set("flavorFamily", e.target.value as MongoProduct["flavorFamily"])
-                }
-                className={inputCls}
-              >
-                {FLAVOR_FAMILIES.map((f) => (
-                  <option key={f.value} value={f.value}>
-                    {f.value}
-                  </option>
-                ))}
-              </select>
+              <CustomSelect value={draft.flavorFamily} onChange={(val) => set("flavorFamily", val as MongoProduct["flavorFamily"])} options={FLAVOR_FAMILIES.map(f => ({value:f.value,label:f.value}))} />
             </Field>
             <Field label="Flavor color (hex)">
               <div className="flex gap-2">

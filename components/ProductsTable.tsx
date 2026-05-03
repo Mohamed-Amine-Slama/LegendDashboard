@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { MongoProduct } from "@/lib/types";
 import { BRANDS, CATEGORIES } from "@/lib/enums";
 import DeleteProductButton from "./DeleteProductButton";
+import CustomSelect from "./CustomSelect";
 import ProductQuickActions from "./ProductQuickActions";
 
 type StockMode = "ALL" | "IN" | "OUT";
@@ -110,56 +111,17 @@ export default function ProductsTable({ products }: Props) {
 
           <div className="lg:col-span-2">
             <Label>Category</Label>
-            <select
-              aria-label="Filter by category"
-              value={category}
-              onChange={(e) =>
-                setCategory(e.target.value as MongoProduct["category"] | "ALL")
-              }
-              className={inputCls}
-            >
-              <option value="ALL">All</option>
-              {CATEGORIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+            <CustomSelect value={category} onChange={setCategory} options={[{value:"ALL",label:"All categories"}, ...CATEGORIES.map(c => ({value:c,label:c}))]} />
           </div>
 
           <div className="lg:col-span-3">
             <Label>Brand</Label>
-            <select
-              aria-label="Filter by brand"
-              value={brand}
-              onChange={(e) =>
-                setBrand(e.target.value as MongoProduct["brand"] | "ALL")
-              }
-              className={inputCls}
-            >
-              <option value="ALL">All</option>
-              {BRANDS.map((b) => (
-                <option key={b} value={b}>
-                  {b}
-                </option>
-              ))}
-            </select>
+            <CustomSelect value={brand} onChange={setBrand} options={[{value:"ALL",label:"All brands"}, ...BRANDS.map(b => ({value:b,label:b}))]} />
           </div>
 
           <div className="lg:col-span-3">
             <Label>Sort</Label>
-            <select
-              aria-label="Sort products"
-              value={sort}
-              onChange={(e) => setSort(e.target.value as SortMode)}
-              className={inputCls}
-            >
-              {SORT_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
+            <CustomSelect value={sort} onChange={setSort} options={SORT_OPTIONS} />
           </div>
         </div>
 
