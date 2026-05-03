@@ -26,6 +26,10 @@ export type NicotineMg = 0 | 10 | 20 | 50;
 
 export type Volume = 1 | 2 | 4 | 10 | 30;
 
+/** LIQUID-only sub-classification. Fruities lean fresh/fruit-forward,
+ *  Gourmands lean dessert/creamy/indulgent. Undefined for non-LIQUID rows. */
+export type LiquidType = "Fruity" | "Gourmand";
+
 export type ProductBadge = "NEW" | "HOT" | "MAX";
 
 /** Mongo document shape for the `products` collection. */
@@ -38,6 +42,8 @@ export interface MongoProduct {
   nicotineMg: NicotineMg;
   mlSize?: Volume;
   puffCount?: number;
+  /** LIQUID-only sub-bucket. Undefined for non-LIQUID rows. */
+  liquidType?: LiquidType;
   caffeinated: boolean;
   brand: Brand;
   flavorFamily: FlavorFamily;

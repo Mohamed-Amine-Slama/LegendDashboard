@@ -7,6 +7,7 @@ import {
   BRANDS,
   CATEGORIES,
   FLAVOR_FAMILIES,
+  LIQUID_TYPES,
   NICOTINE_OPTIONS,
   VOLUME_OPTIONS,
 } from "@/lib/enums";
@@ -49,8 +50,9 @@ export default function ProductForm({ product }: Props) {
     setDraft((d) => ({ ...d, [key]: value }));
   }
 
-  /** Switching category changes which of mlSize / puffCount is meaningful.
-   *  Drop the stale one so it doesn't get persisted on the document. */
+  /** Switching category changes which of mlSize / puffCount / liquidType is
+   *  meaningful. Drop the stale ones so they don't get persisted on the
+   *  document. */
   function onCategoryChange(next: MongoProduct["category"]) {
     setDraft((d) => ({
       ...d,
@@ -58,6 +60,9 @@ export default function ProductForm({ product }: Props) {
       ...(next === "PUFFS"
         ? { mlSize: undefined }
         : { puffCount: undefined }),
+      ...(next === "LIQUID"
+        ? { liquidType: d.liquidType ?? "Fruity" }
+        : { liquidType: undefined }),
     }));
   }
 
@@ -136,7 +141,7 @@ export default function ProductForm({ product }: Props) {
           </Field>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field label="Category *">
-              <CustomSelect value={draft.category} onChange={(val) => set("category", val)} options={CATEGORIES.map(c => ({value:c,label:c}))} />
+              <CustomSelect value={draft.category} onChange={(val) => onCategoryChange(val as MongoProduct["category"])} options={CATEGORIES.map(c => ({value:c,label:c}))} />
             </Field>
             <Field label="Brand">
               <CustomSelect value={draft.brand} onChange={(val) => set("brand", val)} options={BRANDS.map(b => ({value:b,label:b}))} />
@@ -185,6 +190,19 @@ export default function ProductForm({ product }: Props) {
               </Field>
             )}
           </div>
+
+          {draft.category === "LIQUID" && (
+            <Field label="Liquid type">
+              <CustomSelect
+                value={draft.liquidType ?? "Fruity"}
+                onChange={(val) => set("liquidType", val as MongoProduct["liquidType"])}
+                options={LIQUID_TYPES.map((t) => ({ value: t.value, label: t.label }))}
+              />
+              <p className="mt-1 text-[11px] text-muted">
+                Fruity = fresh / fruit-forward · Gourmand = dessert / creamy / indulgent.
+              </p>
+            </Field>
+          )}
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field label="Flavor family">

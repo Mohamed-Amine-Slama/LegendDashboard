@@ -1,6 +1,7 @@
 import type {
   Brand,
   FlavorFamily,
+  LiquidType,
   NicotineMg,
   ProductBadge,
   ShopCategory,
@@ -19,6 +20,12 @@ export const NICOTINE_OPTIONS: { value: NicotineMg; label: string }[] = [
 ];
 
 export const VOLUME_OPTIONS: Volume[] = [1, 2, 4, 10, 30];
+
+/** LIQUID sub-categories — only shown when category === "LIQUID". */
+export const LIQUID_TYPES: { value: LiquidType; label: string }[] = [
+  { value: "Fruity",   label: "Fruity" },
+  { value: "Gourmand", label: "Gourmand" },
+];
 
 export const FLAVOR_FAMILIES: { value: FlavorFamily; color: string }[] = [
   { value: "Fruity", color: "#E8463A" },
