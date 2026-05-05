@@ -72,3 +72,64 @@ export type ProductDraft = Partial<MongoProduct> & {
   category: ShopCategory;
   priceTND: number;
 };
+
+/* ──────────────────────────────────────────────────────────────────
+   Orders (mirrors storefront's vape-store-vitrine/types/order.ts).
+   ────────────────────────────────────────────────────────────────── */
+
+export type OrderStatus = "pending" | "confirmed" | "shipped" | "delivered" | "cancelled";
+
+export type PaymentMethod = "cod";
+
+export interface OrderLineItem {
+  productId: string;
+  name: string;
+  category: ShopCategory;
+  imageSrc: string;
+  unitPriceTND: number;
+  listPriceTND: number;
+  qty: number;
+  lineTotalTND: number;
+}
+
+export interface OrderCustomer {
+  fullName: string;
+  phone: string;
+  email?: string;
+}
+
+export interface OrderDelivery {
+  address: string;
+  city: string;
+  governorate: string;
+  postalCode?: string;
+  notes?: string;
+}
+
+export interface MongoOrder {
+  _id?: string;
+  reference: string;
+  customer: OrderCustomer;
+  delivery: OrderDelivery;
+  items: OrderLineItem[];
+  subtotalTND: number;
+  shippingTND: number;
+  totalTND: number;
+  paymentMethod: PaymentMethod;
+  status: OrderStatus;
+  locale: "en" | "fr" | "ar";
+  createdAt: string;
+  updatedAt: string;
+  /** Date when MongoDB's TTL monitor will auto-delete this order. The
+   *  storefront sets this to createdAt + ORDER_TTL_DAYS at write time.
+   *  Optional because pre-TTL orders get backfilled lazily. */
+  expiresAt?: Date;
+}
+
+export const ORDER_STATUSES: OrderStatus[] = [
+  "pending",
+  "confirmed",
+  "shipped",
+  "delivered",
+  "cancelled",
+];

@@ -78,6 +78,18 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           >
             Products
           </Link>
+          <Link
+            href="/orders"
+            className={navLink(pathname?.startsWith("/orders") ?? false)}
+          >
+            Orders
+          </Link>
+          <Link
+            href="/analytics"
+            className={navLink(pathname?.startsWith("/analytics") ?? false)}
+          >
+            Analytics
+          </Link>
           <button
             onClick={logout}
             type="button"
@@ -108,6 +120,22 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
                   }`}
                 >
                   Products
+                </Link>
+                <Link
+                  href="/orders"
+                  className={`px-4 py-2 hover:bg-bg-dark/5 transition-colors ${
+                    pathname?.startsWith("/orders") ? "text-accent" : "text-bg-dark"
+                  }`}
+                >
+                  Orders
+                </Link>
+                <Link
+                  href="/analytics"
+                  className={`px-4 py-2 hover:bg-bg-dark/5 transition-colors ${
+                    pathname?.startsWith("/analytics") ? "text-accent" : "text-bg-dark"
+                  }`}
+                >
+                  Analytics
                 </Link>
                 <div className="my-1 border-t border-border" />
                 <button

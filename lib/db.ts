@@ -58,4 +58,5 @@ export const COLLECTIONS = {
   products: "products",
   categories: "categories",
   flavors: "flavors",
+  orders: "orders",
 } as const;
