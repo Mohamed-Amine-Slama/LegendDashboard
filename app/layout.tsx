@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "LEGEND VAPE STORE — Admin",
-  description: "Product catalogue management for the LEGEND VAPE STORE shop.",
+  title: "La Maison Des Vapes — Admin",
+  description: "Product catalogue management for the La Maison Des Vapes shop.",
   icons: {
     icon: "/Logo (2).png",
     apple: "/Logo (2).png",

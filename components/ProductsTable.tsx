@@ -237,7 +237,7 @@ export default function ProductsTable({ products }: Props) {
                       {p.category}
                     </td>
                     <td className="px-4 py-3 text-sm">
-                      {p.brand.replace("LEGEND VAPE STORE ", "")}
+                      {p.brand.replace("La Maison Des Vapes ", "")}
                     </td>
                     <td className="px-4 py-3 text-sm tabular-nums">{p.nicotineMg}mg</td>
                     <td className="px-4 py-3 text-right text-sm tabular-nums">
@@ -335,7 +335,7 @@ function ProductCard({ product: p }: { product: MongoProduct }) {
             )}
           </div>
           <p className="mt-1 text-[11px] uppercase tracking-wider text-muted">
-            {p.category} · {p.brand.replace("LEGEND VAPE STORE ", "")} · {p.nicotineMg}mg
+            {p.category} · {p.brand.replace("La Maison Des Vapes ", "")} · {p.nicotineMg}mg
           </p>
         </div>
 

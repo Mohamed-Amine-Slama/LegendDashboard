@@ -26,7 +26,7 @@ const EMPTY: MongoProduct = {
   priceTND: 0,
   nicotineMg: 20,
   caffeinated: false,
-  brand: "LEGEND VAPE STORE Original",
+  brand: "La Maison Des Vapes Original",
   flavorFamily: "Fruity",
   flavorColor: "#C8273A",
   imageUrl: "",

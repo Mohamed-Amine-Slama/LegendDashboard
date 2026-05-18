@@ -65,8 +65,8 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
         >
           <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-accent" />
           <span className="truncate">
-            <span className="sm:hidden">Legend · Admin</span>
-            <span className="hidden sm:inline">LEGEND VAPE STORE · Admin</span>
+            <span className="sm:hidden">Maison · Admin</span>
+            <span className="hidden sm:inline">La Maison Des Vapes · Admin</span>
           </span>
         </Link>
 

@@ -52,7 +52,7 @@ function LoginForm() {
         className="w-full max-w-sm rounded-2xl border border-border bg-white p-8 shadow-sm"
       >
         <div className="mb-7 text-center">
-          <h1 className="text-2xl font-bold tracking-tight">LEGEND VAPE STORE</h1>
+          <h1 className="text-2xl font-bold tracking-tight">La Maison Des Vapes</h1>
           <p className="mt-1 text-sm text-muted">Admin sign-in</p>
         </div>
 

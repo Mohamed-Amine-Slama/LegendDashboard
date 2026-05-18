@@ -37,10 +37,10 @@ export const FLAVOR_FAMILIES: { value: FlavorFamily; color: string }[] = [
 ];
 
 export const BRANDS: Brand[] = [
-  "LEGEND VAPE STORE Original",
-  "LEGEND VAPE STORE MAX",
-  "LEGEND VAPE STORE PRO",
-  "LEGEND VAPE STORE LITE",
+  "La Maison Des Vapes Original",
+  "La Maison Des Vapes MAX",
+  "La Maison Des Vapes PRO",
+  "La Maison Des Vapes LITE",
   "Vozol",
   "Wotofo",
 ];
